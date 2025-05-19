@@ -1,5 +1,8 @@
 let humanScore = 0;
+let currentHumanScore = 0;
+let currentComputerScore = 0;
 let computerScore = 0;
+let rodada = 0;
 
 function getComputerChoice() {
     let choice = Math.random();
@@ -24,44 +27,81 @@ function getHumanChoice()  {
     return prompt("Escreva pedra, papel ou tesoura");
 }
 
-function rodada(numero) {
-    let rodada = numero;
+function rodadacalc() {
+    rodada ++;
     return rodada
 }
 
 
+function showResults(texto) {
+    let fotb = "<br>" + texto + "<br>"; 
+    document.getElementById("result").innerHTML = "Jogador: " + humanScore + "<br> Computador: " + computerScore;
+    document.getElementById("result").innerHTML += fotb;
+}
+
+
+
+
 function playRound(humanSelection, computerSelection) {
     if (humanSelection == "pedra" && computerSelection == "tesoura") {
+        currentHumanScore++;
         humanScore++;
     }
     else if (humanSelection == "papel" && computerSelection == "pedra") {
         humanScore++;
+        currentHumanScore++;
     }
     else if (humanSelection == "tesoura" && computerSelection == "papel") {
         humanScore++;
+        currentHumanScore++;
     }
     else {
         computerScore++;
+        currentComputerScore++;
     }
 }
 function playgame() {
-    humanScore = 0;
-    computerScore = 0;
-    for (let i = 0; i < 5; i++){
-        rodada(i)
+        let rodadaAtual = rodadacalc();
         let humanSelection = getHumanChoice().toLowerCase();
         let computerSelection = getComputerChoice();
         playRound(humanSelection, computerSelection);
-        alert("Rodada " + (i +1) + ": " + humanSelection + " x " + computerSelection + "\n" + "Pontuação:  Humano: " + humanScore + " x " + "Computador: " + computerScore);
-
-    }
-    if (humanScore > computerScore) {
-        alert("-----Humano ganhou!----- " + "\n" + "------------" + humanScore + " x " + computerScore + "------------" );
-    }
-    else if (humanScore == computerScore) {
-        alert("-----Empate!----- " + "\n" + "------------" + humanScore + " x " + computerScore + "------------");
-    }
-    else {
-        alert("-----Computador ganhou!----- " + "\n" + "------------" + humanScore + " x " + computerScore + "------------"); 
-    }
+        showResults();
+        if (rodadaAtual < 5) {
+            if (currentHumanScore > currentComputerScore) {
+                showResults("Você ganhou a " + rodadaAtual + "ª rodada" );
+                currentHumanScore = 0;
+                currentComputerScore = 0; 
+            } 
+                else if (currentComputerScore > currentHumanScore) {      
+                showResults("Você perdeu a " + rodadaAtual + "ª rodada");
+                currentHumanScore = 0;
+                currentComputerScore = 0; 
+            } 
+            else {
+                showResults("Houve um empate na " + rodadaAtual + "ª rodada");
+                currentHumanScore = 0;
+                currentComputerScore = 0; 
+            }
+             
+        }
+        if (rodadaAtual == 5) {
+            if (humanScore > computerScore) {
+                showResults("Você ganhou!");    
+                humanScore = 0;
+                computerScore = 0;
+                rodada = 0;
+            } 
+            else if (computerScore > humanScore) {      
+                showResults("Você perdeu!");
+                humanScore = 0;
+                computerScore = 0;
+                rodada = 0;
+            } 
+            else {
+                showResults("Empate!");
+                humanScore = 0;
+                computerScore = 0;
+                rodada = 0;
+            }
+        }
 }   
